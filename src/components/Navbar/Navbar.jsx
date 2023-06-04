@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import './Navbar.scss';
+import { AuthContext } from '../../auth/authContext';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
 
+  const { user } = useContext(AuthContext);
   window.onscroll = () => {
     setIsScrolled(window.scrollY === 0 ? false : true);
 
@@ -44,11 +46,8 @@ function Navbar() {
             <SearchIcon className="icon" />
           </Link>
           {/* <NotificationsIcon className="icon" /> */}
-          <img
-            src="https://www.richardtmoore.co.uk/wp-content/uploads/2016/10/btx-avatar-placeholder-01-2.jpg"
-            alt=""
-          />
-          <p className="username">Alex</p>
+          <img src={user ? user.profilePicture : '.'} alt="" />
+          <p className="username">{user ? user.username : '.'}</p>
           <div className="profile">
             <ArrowDropDownIcon className="icon" />
             <div className="options">

@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import axios from 'axios';
 import './Featured.scss';
+import { AuthContext } from '../../auth/authContext';
 
 function Featured({ type }) {
   const [randomContent, setRandomContent] = useState({});
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const getRandomContent = async () => {
       try {
         let path = 'contents/random';
         let pathtype = type ? `?type=${type}` : '';
-        const response = await axios.get('http://localhost:5000/api/'+path + pathtype);
+        const response = await axios.get(path + pathtype, {
+          headers: { authorization: `Bearer ${user.token}` },
+        });
+
         if (response) {
+          console.log(response.data);
           setRandomContent(response.data);
         }
       } catch (err) {
         console.log(err);
       }
     };
+
     getRandomContent();
 
     const interval = setInterval(() => {
@@ -47,7 +54,10 @@ function Featured({ type }) {
         <div className="buttons">
           <button
             className="play"
-            onClick={() => navigate(`/watch/${randomContent._id}`)}
+            onClick={() => {
+              navigate(`/watch/${randomContent._id}`);
+              console.log(randomContent._id);
+            }}
           >
             <PlayArrowIcon />
             <span>Play</span>
