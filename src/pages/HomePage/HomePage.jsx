@@ -22,8 +22,7 @@ function HomePage({ type }) {
     async function GetRandomList() {
       dispatch({ type: 'GET_REQUEST' });
       try {
-        const results = await axios.get(`lists?type=${type ? type : ''}`, {
-          //`/lists/${type ? '?type=' + type : ''}`
+        const results = await axios.get(`/lists?type=${type ? type : ''}`, {
           headers: { authorization: `Bearer ${user.token}` },
         });
         dispatch({
@@ -38,7 +37,6 @@ function HomePage({ type }) {
     }
 
     GetRandomList();
-    console.log(lists);
   }, [type]);
 
   useEffect(() => {
@@ -51,7 +49,7 @@ function HomePage({ type }) {
       <Navbar></Navbar>
       <Featured type={type}></Featured>
       {loading ? (
-        <Loading></Loading>
+        <Loading ></Loading>
       ) : error ? (
         <Error error={error}></Error>
       ) : (

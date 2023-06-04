@@ -16,12 +16,14 @@ function Featured({ type }) {
       try {
         let path = 'contents/random';
         let pathtype = type ? `?type=${type}` : '';
-        const response = await axios.get(path + pathtype, {
-          headers: { authorization: `Bearer ${user.token}` },
-        });
+        const response = await axios.get(
+           path + pathtype,
+          {
+            headers: { authorization: `Bearer ${user.token}` },
+          }
+        );
 
         if (response) {
-          console.log(response.data);
           setRandomContent(response.data);
         }
       } catch (err) {
@@ -35,9 +37,7 @@ function Featured({ type }) {
       getRandomContent();
     }, 4000);
 
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, [type]);
 
   return (

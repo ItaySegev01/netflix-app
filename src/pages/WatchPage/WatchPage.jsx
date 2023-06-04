@@ -21,7 +21,7 @@ function WatchPage() {
   useEffect(() => {
     async function GetContent() {
       try {
-        const response = await axios.get(`contents/${_id}`, {
+        const response = await axios.get(`contents/get/${_id}`, {
           headers: { authorization: `Bearer ${user.token}` },
         });
 
@@ -32,7 +32,7 @@ function WatchPage() {
     }
 
     GetContent();
-  }, [_id, navigate]);
+  }, [_id, navigate, user.token]);
   return (
     <div className="watch">
       <Link className="back" to="/">

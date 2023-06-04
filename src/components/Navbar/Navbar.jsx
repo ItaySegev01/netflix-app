@@ -4,16 +4,23 @@ import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import './Navbar.scss';
 import { AuthContext } from '../../auth/authContext';
+import { Logout } from '../../auth/authActions';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user , dispatch} = useContext(AuthContext);
 
-  const { user } = useContext(AuthContext);
+  const logoutHandler = () => {
+    dispatch(Logout());
+  };
+
   window.onscroll = () => {
     setIsScrolled(window.scrollY === 0 ? false : true);
-
     return () => (window.onscroll = null);
   };
+
+
+
 
   return (
     <div className={isScrolled ? 'navbar scrolled' : 'navbar'}>
@@ -34,24 +41,17 @@ function Navbar() {
           <Link to="/movies" className="link">
             <span className="navbarmainLinks">Movies</span>
           </Link>
-          {/* <Link to="/new-and-popular" className="link">
-        <span>New and Popular</span>
-      </Link> */}
-          {/* <Link to="/my-list" className="link">
-        <span>My List</span>
-      </Link> */}
         </div>
         <div className="right">
           <Link className="link" to="/search">
             <SearchIcon className="icon" />
           </Link>
-          {/* <NotificationsIcon className="icon" /> */}
           <img src={user ? user.profilePicture : '.'} alt="" />
           <p className="username">{user ? user.username : '.'}</p>
           <div className="profile">
             <ArrowDropDownIcon className="icon" />
             <div className="options">
-              {/* <span onClick={logoutHandler}>Logout</span> */}
+              <span onClick={logoutHandler}>Logout</span>
               <span></span>
             </div>
           </div>

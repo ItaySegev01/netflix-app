@@ -25,6 +25,8 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!email ||!password) 
+      return;
     try {
       await loginCall({ email, password }, dispatch);
     } catch (err) {
