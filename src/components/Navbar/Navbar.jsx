@@ -41,6 +41,9 @@ function Navbar() {
           <Link to="/movies" className="link">
             <span className="navbarmainLinks">Movies</span>
           </Link>
+          <Link to="/mylist" className="link">
+            <span className="navbarmainLinks">My List</span>
+          </Link>
         </div>
         <div className="right">
           <Link className="link" to="/search">

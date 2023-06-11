@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../auth/authContext';
 import { loginCall } from '../../auth/authApiCalls';
+import { getError, isValidEmail } from '../../Utils';
+import {toast} from'react-toastify';
 import './LoginPage.scss';
 
 function LoginPage() {
@@ -25,12 +27,18 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!email ||!password) 
+    if (!email || !isValidEmail(email)){
+      toast.error('Please enter a valid email');
       return;
+    } 
+    if (!password || password.length < 5){ 
+      toast.error('Please enter a password, enter at least 5 characters');
+      return;
+    }
     try {
       await loginCall({ email, password }, dispatch);
     } catch (err) {
-      console.log(err);
+      toast.error(getError(err));
     }
   };
 

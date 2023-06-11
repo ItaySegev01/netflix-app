@@ -1,8 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { getError } from '../../Utils';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import { AuthContext } from '../../auth/authContext';
+import {toast} from 'react-toastify';
 import axios from 'axios';
 import './WatchPage.scss';
 
@@ -27,7 +29,7 @@ function WatchPage() {
 
         setContent(response.data);
       } catch (err) {
-        console.log(err);
+        toast.error(getError(err));
       }
     }
 

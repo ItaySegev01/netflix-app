@@ -4,6 +4,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../auth/authContext';
 import Navbar from '../../components/Navbar/Navbar';
 import React, { useContext, useState, useEffect } from 'react';
+import {toast} from'react-toastify';
+import {getError} from "../../Utils"
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import './Search.scss';
@@ -39,7 +41,7 @@ function Search() {
         );
         setContent(result.data);
       } catch (error) {
-        console.log(error);
+        toast.error(getError(error));
       }
     };
     getResult();

@@ -1,0 +1,24 @@
+@import '../../App.scss';
+
+.ListPage {
+  background-color: var(--main-color);
+  overflow: hidden;
+  .list {
+    margin-top: 25px;
+    margin-bottom: 30px;
+    width: 100%;
+    .list-title {
+      color: white;
+      font-size: 30px;
+      font-weight: 500;
+      margin-left: 50px;
+    }
+    .carousel {
+      margin-top: 25px;
+      overflow: visible;
+      .item:hover {
+        z-index: 1;
+      }
+    }
+  }
+}

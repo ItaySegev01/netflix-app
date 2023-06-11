@@ -6,6 +6,8 @@ import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import {toast} from'react-toastify';
+import { isValidEmail } from '../../Utils';
 import './RegisterPage.scss';
 import { registerCall } from '../../auth/authApiCalls';
 
@@ -22,14 +24,21 @@ function RegisterPage() {
   const { user, isFetching, dispatch } = useContext(AuthContext);
 
   function handleStart() {
+    if (!isValidEmail(emailRef.current.value)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
     setEmail(emailRef.current.value);
   }
 
   async function handleFinish(e) {
     e.preventDefault();
+    if (!passwordRef.current.value || passwordRef.current.value.length < 5) {
+      toast.error('Please enter a valid password, the password must be at least 5 characters');
+      return;
+    }
     setPassword(passwordRef.current.value);
     const username = email.substring(0, email.indexOf('@')); // Taking a username before "@"
-
     try {
       await registerCall({ email, password, username }, dispatch);
     } catch (err) {

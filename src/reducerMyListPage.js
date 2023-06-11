@@ -1,25 +1,22 @@
-export const initialHomePageReducer = {
+export const initialMyListPageReducer = {
     loading: true,
     error:"",
-    lists:[]
+    list:[]
 }
 
-
-export const reducerHomePage = (state,{type,payload})=>{
+export const reducerMyListPage = (state,{type,payload})=>{
 
     switch(type){
-
         case "GET_REQUEST":{
             return {...state,loading:true}
         }
         case "GET_SUCCESS":{
-            return {...state,lists:payload,loading:false}
+            return {...state,list:payload,loading:false}
         }
         case "GET_FAIL":{
             return {...state,loading:false,error:payload}
         }
         default:
         return state
-
     }
 }
