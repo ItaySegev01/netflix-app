@@ -33,8 +33,8 @@ function RegisterPage() {
 
   async function handleFinish(e) {
     e.preventDefault();
-    if (!passwordRef.current.value || passwordRef.current.value.length < 5) {
-      toast.error('Please enter a valid password, the password must be at least 5 characters');
+    if (!passwordRef.current.value || passwordRef.current.value.length < 5 || /\s/.test(passwordRef.current.value)) {
+      toast.error('Please enter a valid password, the password must be at least 5 characters \n and the password must not contain any spaces');
       return;
     }
     setPassword(passwordRef.current.value);

@@ -31,7 +31,7 @@ function LoginPage() {
       toast.error('Please enter a valid email');
       return;
     } 
-    if (!password || password.length < 5){ 
+    if (!password || password.trim().length < 5 || /\s/.test(password)){ 
       toast.error('Please enter a password, enter at least 5 characters');
       return;
     }

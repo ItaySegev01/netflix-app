@@ -9,10 +9,9 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import axios from 'axios';
 import { AuthContext } from '../../auth/authContext';
 import { Button } from '@mui/material';
-import {toast} from'react-toastify';
+import { toast } from 'react-toastify';
 import { getError } from '../../Utils';
 import './ListItem.scss';
-
 
 function ListItem({ item }) {
   const [deleted, setDeleted] = useState(false);
@@ -108,6 +107,8 @@ function ListItem({ item }) {
               </div>
               <div className="desc">{item.desc}</div>
               <div className="genre">{item.genre}</div>
+              <div className="likes">likes amaout: {item.numberLikes}</div>
+              <div className="dislikes">dislikes amaout: {item.numberDisLikes}</div>
             </div>
           </>
         )}
