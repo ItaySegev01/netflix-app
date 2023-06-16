@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useReducer, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -6,14 +6,21 @@ import AddIcon from '@mui/icons-material/Add';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
+import Loading from '../Loading/Loading';
+import Error from '../Error/Error';
 import axios from 'axios';
 import { AuthContext } from '../../auth/authContext';
 import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
 import { getError } from '../../Utils';
+import { reducerListItem, initialListItemReducer } from '../../reducerListItem';
 import './ListItem.scss';
 
 function ListItem({ item }) {
+  const [{ loading, error }, dispatch] = useReducer(
+    reducerListItem,
+    initialListItemReducer
+  );
   const [deleted, setDeleted] = useState(false);
   let inMyListPage = false;
   if (window.location.href === 'http://localhost:3000/mylist') {
@@ -30,7 +37,7 @@ function ListItem({ item }) {
   const handeleAddContent = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(
+     await axios.post(
         '/users/addcontent',
         { user, item },
         {
@@ -39,6 +46,7 @@ function ListItem({ item }) {
           },
         }
       );
+      toast.dark(`${item.title} was added to your list`)
     } catch (error) {
       toast.error(getError(error));
     }
@@ -62,58 +70,121 @@ function ListItem({ item }) {
     }
   };
 
+  const addlike = async () => {
+    dispatch({ type: 'UPDATE_REQUEST' });
+    try {
+      const res = await axios.patch(
+        `/contents/update/like/${item._id}`,
+        {
+          userId: user._id,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      dispatch({ type: 'UPDATE_SUCCESS' });
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      dispatch({ type: 'UPDATE_FAIL', payload: error.message });
+    }
+  };
+
+  const addDislike = async () => {
+    dispatch({ type: 'UPDATE_REQUEST' });
+    try {
+      item = await axios.patch(
+        `/contents/update/dislike/${item._id}`,
+        {
+          userId: user._id,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      dispatch({ type: 'UPDATE_SUCCESS' });
+      console.log(item);
+    } catch (error) {
+      dispatch({ type: 'UPDATE_FAIL', payload: error.message });
+    }
+  };
+
+  const handleLikeContent = (event) => {
+    event.preventDefault();
+    item = addlike();
+  };
+
+  const handleDisLikeContent = (event) => {
+    event.preventDefault();
+    addDislike();
+  };
+
   return (
-    <Link to={{ pathname: `/details/${item._id}` }} className="link">
-      <div
-        className="listItem"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <img src={item?.imgThumb} alt="" />
-        {isHovered && (
-          <>
-            <ReactPlayer
-              className="video"
-              height={145}
-              width={300}
-              url={item.trailer}
-              playing={true}
-            ></ReactPlayer>
-            <div className="itemInfo">
-              <div className="icons">
-                <Button>
-                  <PlayArrowIcon className="icon link" />
-                </Button>
-                {inMyListPage ? (
-                  <Button onClick={(e) => handeleRemoveContent(e)}>
-                    <CancelIcon className="icon" />
-                  </Button>
-                ) : (
-                  <Button onClick={(e) => handeleAddContent(e)}>
-                    <AddIcon className="icon" />
-                  </Button>
-                )}
-                <Button>
-                  <ThumbUpOutlinedIcon className="icon" />
-                </Button>
-                <Button>
-                  <ThumbDownOffAltOutlinedIcon className="icon" />
-                </Button>
-              </div>
-              <div className="itemInfoTop">
-                <span>{item.duration}</span>
-                <span className="limit">+{item.limit}</span>
-                <span>{item.year}</span>
-              </div>
-              <div className="desc">{item.desc}</div>
-              <div className="genre">{item.genre}</div>
-              <div className="likes">likes amaout: {item.numberLikes}</div>
-              <div className="dislikes">dislikes amaout: {item.numberDisLikes}</div>
-            </div>
-          </>
-        )}
-      </div>
-    </Link>
+    <>
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <Error error={error} />
+      ) : (
+        <Link to={{ pathname: `/details/${item._id}` }} className="link">
+          <div
+            className="listItem"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <img src={item?.imgThumb} alt="" />
+            {isHovered && (
+              <>
+                <ReactPlayer
+                  className="video"
+                  height={145}
+                  width={300}
+                  url={item.trailer}
+                  playing={true}
+                ></ReactPlayer>
+                <div className="itemInfo">
+                  <div className="icons">
+                    <Button>
+                      <PlayArrowIcon className="icon link" />
+                    </Button>
+                    {inMyListPage ? (
+                      <Button onClick={(e) => handeleRemoveContent(e)}>
+                        <CancelIcon className="icon" />
+                      </Button>
+                    ) : (
+                      <Button onClick={(e) => handeleAddContent(e)}>
+                        <AddIcon className="icon" />
+                      </Button>
+                    )}
+                    <Button onClick={(e) => handleLikeContent(e)}>
+                      <ThumbUpOutlinedIcon className="icon" />
+                    </Button>
+                    <Button onClick={(e) => handleDisLikeContent(e)}>
+                      <ThumbDownOffAltOutlinedIcon className="icon" />
+                    </Button>
+                  </div>
+                  <div className="itemInfoTop">
+                    <span>{item.duration}</span>
+                    <span className="limit">+{item.limit}</span>
+                    <span>{item.year}</span>
+                  </div>
+                  <div className="desc">{item.desc}</div>
+                  <div className="genre">{item.genre}</div>
+                  <div className="likes">likes amaout: {item.numberLikes}</div>
+                  <div className="dislikes">
+                    dislikes amaout: {item.numberDisLikes}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </Link>
+      )}
+    </>
   );
 }
 

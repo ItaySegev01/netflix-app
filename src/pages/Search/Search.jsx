@@ -55,7 +55,7 @@ function Search() {
         searchText ? `query=${searchText}` : ''
       }`
     );
-  }, [searchText]);
+  }, [searchText,content]);
 
   useEffect(() => {
     if (!user) navigate('/login');
