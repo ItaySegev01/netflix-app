@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer, useEffect } from 'react';
+import React, { useState, useContext, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -22,6 +22,7 @@ function ListItem({ item }) {
     initialListItemReducer
   );
   const [deleted, setDeleted] = useState(false);
+  const [content, setContent] = useState(item);
   let inMyListPage = false;
   if (window.location.href === 'http://localhost:3000/mylist') {
     inMyListPage = true;
@@ -37,7 +38,7 @@ function ListItem({ item }) {
   const handeleAddContent = async (event) => {
     event.preventDefault();
     try {
-     await axios.post(
+      await axios.post(
         '/users/addcontent',
         { user, item },
         {
@@ -46,7 +47,7 @@ function ListItem({ item }) {
           },
         }
       );
-      toast.dark(`${item.title} was added to your list`)
+      toast.dark(`${item.title} was added to your list`);
     } catch (error) {
       toast.error(getError(error));
     }
@@ -84,9 +85,9 @@ function ListItem({ item }) {
           },
         }
       );
+      setContent(res.data);
       dispatch({ type: 'UPDATE_SUCCESS' });
-      console.log(res.data);
-      return res.data;
+      
     } catch (error) {
       dispatch({ type: 'UPDATE_FAIL', payload: error.message });
     }
@@ -95,7 +96,7 @@ function ListItem({ item }) {
   const addDislike = async () => {
     dispatch({ type: 'UPDATE_REQUEST' });
     try {
-      item = await axios.patch(
+      const res = await axios.patch(
         `/contents/update/dislike/${item._id}`,
         {
           userId: user._id,
@@ -106,8 +107,8 @@ function ListItem({ item }) {
           },
         }
       );
+      setContent(res.data);
       dispatch({ type: 'UPDATE_SUCCESS' });
-      console.log(item);
     } catch (error) {
       dispatch({ type: 'UPDATE_FAIL', payload: error.message });
     }
@@ -115,7 +116,8 @@ function ListItem({ item }) {
 
   const handleLikeContent = (event) => {
     event.preventDefault();
-    item = addlike();
+    addlike();
+    console.log(content.title);
   };
 
   const handleDisLikeContent = (event) => {
@@ -130,13 +132,13 @@ function ListItem({ item }) {
       ) : error ? (
         <Error error={error} />
       ) : (
-        <Link to={{ pathname: `/details/${item._id}` }} className="link">
+        <Link to={{ pathname: `/details/${content._id}` }} className="link">
           <div
             className="listItem"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <img src={item?.imgThumb} alt="" />
+            <img src={content.imgThumb} alt="" />
             {isHovered && (
               <>
                 <ReactPlayer
@@ -168,15 +170,17 @@ function ListItem({ item }) {
                     </Button>
                   </div>
                   <div className="itemInfoTop">
-                    <span>{item.duration}</span>
-                    <span className="limit">+{item.limit}</span>
-                    <span>{item.year}</span>
+                    <span>{content.duration}</span>
+                    <span className="limit">+{content.limit}</span>
+                    <span>{content.year}</span>
                   </div>
-                  <div className="desc">{item.desc}</div>
-                  <div className="genre">{item.genre}</div>
-                  <div className="likes">likes amaout: {item.numberLikes}</div>
+                  <div className="desc">{content.desc}</div>
+                  <div className="genre">{content.genre}</div>
+                  <div className="likes">
+                    likes amaout: {content.numberLikes}
+                  </div>
                   <div className="dislikes">
-                    dislikes amaout: {item.numberDisLikes}
+                    dislikes amaout: {content.numberDisLikes}
                   </div>
                 </div>
               </>
