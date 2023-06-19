@@ -1,5 +1,5 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddIcon from '@mui/icons-material/Add';
@@ -24,9 +24,10 @@ function ListItem({ item }) {
   const [deleted, setDeleted] = useState(false);
   const [inMyListPage, setInMyListPage] = useState(false);
   const [content, setContent] = useState(item);
+  const loacation = useLocation();
   
   useEffect(()=> {
-    if (window.location.href === 'http://localhost:3000/mylist' || window.location.href === 'https://netflix-copy-app.onrender.com/mylist') {
+    if (loacation.pathname === '/mylist') {
       setInMyListPage(true);
     }
   },[]);
