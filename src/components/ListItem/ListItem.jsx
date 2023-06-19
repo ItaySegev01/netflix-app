@@ -117,7 +117,6 @@ function ListItem({ item }) {
   const handleLikeContent = (event) => {
     event.preventDefault();
     addlike();
-    console.log(content.title);
   };
 
   const handleDisLikeContent = (event) => {
