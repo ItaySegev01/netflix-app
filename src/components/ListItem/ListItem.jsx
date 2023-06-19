@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer } from 'react';
+import React, { useState, useContext, useReducer, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -22,11 +22,15 @@ function ListItem({ item }) {
     initialListItemReducer
   );
   const [deleted, setDeleted] = useState(false);
+  const [inMyListPage, setInMyListPage] = useState(false);
   const [content, setContent] = useState(item);
-  let inMyListPage = false;
-  if (window.location.href === 'http://localhost:3000/mylist') {
-    inMyListPage = true;
-  }
+  
+  useEffect(()=> {
+    if (window.location.href === 'http://localhost:3000/mylist' || window.location.href === 'https://netflix-copy-app.onrender.com/mylist') {
+      setInMyListPage(true);
+    }
+  },[]);
+
   const [isHovered, setIsHovered] = useState(false);
   const { user } = useContext(AuthContext);
 
