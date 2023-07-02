@@ -25,12 +25,12 @@ function ListItem({ item }) {
   const [inMyListPage, setInMyListPage] = useState(false);
   const [content, setContent] = useState(item);
   const loacation = useLocation();
-  
-  useEffect(()=> {
+
+  useEffect(() => {
     if (loacation.pathname === '/mylist') {
       setInMyListPage(true);
     }
-  },[]);
+  }, []);
 
   const [isHovered, setIsHovered] = useState(false);
   const { user } = useContext(AuthContext);
@@ -92,7 +92,6 @@ function ListItem({ item }) {
       );
       setContent(res.data);
       dispatch({ type: 'UPDATE_SUCCESS' });
-      
     } catch (error) {
       dispatch({ type: 'UPDATE_FAIL', payload: error.message });
     }
@@ -142,7 +141,7 @@ function ListItem({ item }) {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <img src={content.imgThumb} alt="" />
+            {<img src={content.imgThumb} alt="" />}
             {isHovered && (
               <>
                 <ReactPlayer
@@ -152,6 +151,8 @@ function ListItem({ item }) {
                   url={item.trailer}
                   playing={true}
                 ></ReactPlayer>
+                <br/>
+                <br/>
                 <div className="itemInfo">
                   <div className="icons">
                     <Button>
@@ -180,11 +181,9 @@ function ListItem({ item }) {
                   </div>
                   <div className="desc">{content.desc}</div>
                   <div className="genre">{content.genre}</div>
-                  <div className="likes">
-                    likes amaout: {content.numberLikes}
-                  </div>
+                  <div className="likes">likes : {content.numberLikes}</div>
                   <div className="dislikes">
-                    dislikes amaout: {content.numberDisLikes}
+                    dislikes : {content.numberDisLikes}
                   </div>
                 </div>
               </>

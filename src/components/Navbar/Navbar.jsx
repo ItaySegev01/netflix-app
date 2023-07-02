@@ -47,7 +47,7 @@ function Navbar() {
         </div>
         <div className="right">
           <Link className="link" to="/search">
-            <SearchIcon className="icon" />
+          <SearchIcon className="icon" />
           </Link>
           <img src={user ? user.profilePicture : '.'} alt="" />
           <p className="username">{user ? user.username : '.'}</p>

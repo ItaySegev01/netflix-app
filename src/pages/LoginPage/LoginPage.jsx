@@ -4,7 +4,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../auth/authContext';
 import { loginCall } from '../../auth/authApiCalls';
 import { getError, isValidEmail } from '../../Utils';
-import {toast} from'react-toastify';
+import { toast } from 'react-toastify';
 import './LoginPage.scss';
 
 function LoginPage() {
@@ -27,11 +27,11 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!email || !isValidEmail(email)){
+    if (!email || !isValidEmail(email)) {
       toast.error('Please enter a valid email');
       return;
-    } 
-    if (!password || password.trim().length < 5 || /\s/.test(password)){ 
+    }
+    if (!password || password.trim().length < 5 || /\s/.test(password)) {
       toast.error('Please enter a password, enter at least 5 characters');
       return;
     }
@@ -56,16 +56,24 @@ function LoginPage() {
       <div className="container">
         <form>
           <h1>Sign In</h1>
+          <small>
+            (this is a demo app , you may use: email: admin@example.com
+            <br />
+            password: 12345)
+          </small>
+          <br/>
           <input
             type="email"
             placeholder="Email or phone number"
             onChange={(e) => setEmail(e.target.value)}
           />
+          <br></br>
           <input
             type="password"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
+          <br/>
           <button
             className="loginButton"
             onClick={handleLogin}

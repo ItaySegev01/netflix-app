@@ -3,8 +3,10 @@ import { AuthContext } from '../../auth/authContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import React, { useContext, useEffect, useState } from 'react';
 import './DetailsPage.scss';
+import { Button } from '@mui/material';
 
 function DetailsPage() {
   const params = useParams();
@@ -31,15 +33,23 @@ function DetailsPage() {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
-      return;
+      navigate('/login?redirect=/');
     }
-  }, [user]);
+  }, [user,navigate]);
+
+
   return (
     <div className="main">
       <Navbar />
       <div className="centered">
         <div className="details">
+          <Button className='back' onClick={() => {
+            navigate(-1)
+          }}>
+            <ArrowBackIosNewOutlinedIcon/>
+            <span>Back</span>
+          </Button>
+          <br/>
           <img
             className="picture"
             src={content ? content.imgVertical : ''}

@@ -42,21 +42,22 @@ function Featured({ type }) {
 
   return (
     <div className="featured">
-      {type && (
+      {type ? (
         <div className="category">
           <span>{type === 'movies' ? 'Movies' : 'Series'}</span>
         </div>
-      )}
+      ) : null}
       <img src={randomContent.img} alt={randomContent.title} />
       <div className="info">
         <img src={randomContent.imgTitle} alt={randomContent.title} />
         <span className="desc">{randomContent.description}</span>
+        <br/>
+        <br/>
         <div className="buttons">
           <button
             className="play"
             onClick={() => {
               navigate(`/watch/${randomContent._id}`);
-              console.log(randomContent._id);
             }}
           >
             <PlayArrowIcon />

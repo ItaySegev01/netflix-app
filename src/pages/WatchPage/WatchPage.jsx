@@ -41,6 +41,8 @@ function WatchPage() {
         <ArrowBackIosNewOutlinedIcon />
         home
       </Link>
+      <br />
+      <br />
       <ReactPlayer
         controls={true}
         className="video"
@@ -48,6 +50,7 @@ function WatchPage() {
         width="100%"
         url={content ? content.movie : ''}
         playing={true}
+        
       ></ReactPlayer>
     </div>
   );
