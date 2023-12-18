@@ -6,6 +6,7 @@ import { loginCall } from '../../auth/authApiCalls';
 import { getError, isValidEmail } from '../../Utils';
 import { toast } from 'react-toastify';
 import Loading from '../../components/Loading/Loading';
+import LoaderDots from '../../components/LoaderDots/LoaderDots';
 import {
   reducerLoginPage,
   initialLoginPageReducer,
@@ -16,6 +17,7 @@ import './LoginPage.scss';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoaggingIn, setIsLogginIn] = useState(false);
   const { isFetching, user, dispatch } = useContext(AuthContext);
   const [{ loading, error }, dispatcher] = useReducer(
     reducerLoginPage,
@@ -37,14 +39,17 @@ function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLogginIn(true);
     dispatcher({ type: 'POST_REQUEST' });
     if (!email || !isValidEmail(email)) {
       dispatcher({ type: 'POST_FAIL' });
+      setIsLogginIn(false);
       toast.error('Please enter a valid email');
       return;
     }
     if (!password || password.trim().length < 5 || /\s/.test(password)) {
       dispatcher({ type: 'POST_FAIL' });
+      setIsLogginIn(false);
       toast.error('Please enter a password, enter at least 5 characters');
       return;
     }
@@ -53,6 +58,7 @@ function LoginPage() {
       await loginCall({ email, password }, dispatch);
     } catch (err) {
       toast.error(getError(err));
+      setIsLogginIn(false);
       dispatcher({ type: 'POST_FAIL', payload: error.message });
     }
   };
@@ -100,7 +106,7 @@ function LoginPage() {
                 onClick={handleLogin}
                 disabled={isFetching}
               >
-                Sign In
+                {!isLoaggingIn ? 'Sign In' : <LoaderDots />}
               </button>
               <span>
                 New to Netflix?{' '}
