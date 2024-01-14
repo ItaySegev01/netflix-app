@@ -6,9 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './auth/authContext';
 import axios from 'axios';
 
-
-axios.defaults.baseURL = 'http://localhost:5000/api/';
-
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
